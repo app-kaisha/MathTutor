@@ -47,6 +47,12 @@ struct ContentView: View {
                     RoundedRectangle(cornerRadius: 5)
                         .stroke(.gray, lineWidth: 2)
                 }
+            
+            Button("Guess") {
+                
+            }
+            .buttonStyle(.borderedProminent)
+            .disabled(answer.isEmpty)
         }
         .padding()
         .onAppear {
