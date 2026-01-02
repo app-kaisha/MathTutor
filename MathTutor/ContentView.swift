@@ -16,24 +16,37 @@ struct ContentView: View {
     @State private var firstNumberEmojis = ""
     @State private var secondNumberEmojis = ""
     
+    @State private var answer: String = ""
+    
     private let emojis = ["🍕", "🍎", "🍏", "🐵", "👽", "🧠", "🧜🏽‍♀️", "🧙🏿‍♂️", "🥷", "🐶", "🐹", "🐣", "🦄", "🐝", "🦉", "🦋", "🦖", "🐙", "🦞", "🐟", "🦔", "🐲", "🌻", "🌍", "🌈", "🍔", "🌮", "🍦", "🍩", "🍪"]
     
     var body: some View {
         VStack {
-            VStack {
+            Group {
                 Text(firstNumberEmojis)
                 Text("+")
                 Text(secondNumberEmojis)
             }
             .font(.system(size: 80))
             .multilineTextAlignment(.center)
+            .minimumScaleFactor(0.5)
             
             Spacer()
             
             Text("\(firstNumber) + \(secondNumber) =")
                 .font(.largeTitle)
-            let _ = print(firstNumberEmojis)
-            let _ = print(secondNumberEmojis)
+            
+            TextField("", text: $answer)
+                .font(.largeTitle)
+                .multilineTextAlignment(.center)
+                .textFieldStyle(.roundedBorder)
+                .keyboardType(.numberPad)
+                .frame(width: 60)
+                
+                .overlay {
+                    RoundedRectangle(cornerRadius: 5)
+                        .stroke(.gray, lineWidth: 2)
+                }
         }
         .padding()
         .onAppear {
