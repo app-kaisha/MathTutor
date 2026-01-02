@@ -35,11 +35,13 @@ struct ContentView: View {
             .font(.system(size: 80))
             .multilineTextAlignment(.center)
             .minimumScaleFactor(0.5)
+            .animation(.default, value: message)
             
             Spacer()
             
             Text("\(firstNumber) + \(secondNumber) =")
                 .font(.largeTitle)
+                .animation(.default, value: message)
             
             TextField("", text: $answer)
                 .font(.largeTitle)
@@ -48,7 +50,6 @@ struct ContentView: View {
                 .keyboardType(.numberPad)
                 .focused($isTextfieldFocused)
                 .frame(width: 60)
-                
                 .overlay {
                     RoundedRectangle(cornerRadius: 5)
                         .stroke(.gray, lineWidth: 2)
@@ -67,7 +68,7 @@ struct ContentView: View {
                     message = "Correct!"
                 } else {
                     playSound(soundName: "wrong")
-                    message = "Sorry, the correct answer is \(firstNumber + secondNumber)!"
+                    message = "Sorry, the correct answer is \(firstNumber + secondNumber)"
                 }
                 textfieldDisabled = true
                 guessButtonDisabled = true
@@ -77,23 +78,44 @@ struct ContentView: View {
             
             Spacer()
             
-            Text(message)
-                .font(.largeTitle)
-                .fontWeight(.black)
-                .multilineTextAlignment(.center)
-                .foregroundStyle(message == "Correct!" ? .green : .red)
-                .frame(height: 100)
-                .minimumScaleFactor(0.5)
+            VStack {
+                Text(message)
+                    .font(.largeTitle)
+                    .fontWeight(.black)
+                    .multilineTextAlignment(.center)
+                    .foregroundStyle(message == "Correct!" ? .green : .red)
+                    .minimumScaleFactor(0.5)
+                    .animation(.default, value: message)
+                
+                if message != "" {
+                    Button("Play Again?") {
+                        textfieldDisabled = false
+                        guessButtonDisabled = false
+                        answer = ""
+                        message = ""
+                        generateEquation()
+                        
+                    }
+                    .frame(height: 30)
+                }
+            }
+            .frame(height: 100)
+            
+            
         }
         .padding()
         .onAppear {
-            firstNumber = Int.random(in: 1...10)
-            secondNumber = Int.random(in: 1...10)
-            
-            firstNumberEmojis =  String(repeating: emojis[Int.random(in: 0..<emojis.count)], count: firstNumber)
-            secondNumberEmojis =  String(repeating: emojis[Int.random(in: 0..<emojis.count)], count: secondNumber)
-            
+            generateEquation()
         }
+    }
+    
+    
+    func generateEquation() {
+        firstNumber = Int.random(in: 1...10)
+        secondNumber = Int.random(in: 1...10)
+        
+        firstNumberEmojis =  String(repeating: emojis[Int.random(in: 0..<emojis.count)], count: firstNumber)
+        secondNumberEmojis =  String(repeating: emojis[Int.random(in: 0..<emojis.count)], count: secondNumber)
     }
     
     func playSound(soundName: String) {
